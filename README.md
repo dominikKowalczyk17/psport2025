@@ -1,5 +1,31 @@
-# Vue 3 + TypeScript + Vite
+# Polsat Sport Clone
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This project is a clone of the Polsat Sport website, built using Vue 3, TypeScript, and Vite. The application leverages modern web development tools and practices, including the Composition API, `<script setup>` SFCs, and Pinia for state management.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Project Setup
+
+### Prerequisites
+
+Make sure you have Node.js and npm installed on your machine. You can download them from [nodejs.org](https://nodejs.org/).
+
+### Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/your-username/psport2025.git
+   cd psport2025
+   ```
+
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+
+### Development
+
+To start the development server, run:
+
+```sh
+npm run dev
+```
