@@ -13,7 +13,7 @@ Make sure you have Node.js and npm installed on your machine. You can download t
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/your-username/psport2025.git
+   git clone https://github.com/dominikKowalczyk17/psport2025.git
    cd psport2025
    ```
 
