@@ -1,6 +1,6 @@
 // src/mocks/services/newsService.ts
-import type { News } from '@/types/News';
-import { mockNews } from '../data/news';
+import type { News } from "@/types/News";
+import { mockNews } from "../data/news";
 
 export const newsService = {
   getNews: async (): Promise<News[]> => {
@@ -10,7 +10,18 @@ export const newsService = {
 
   getNewsByCategory: async (categoryId: number): Promise<News[]> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockNews.filter((news) => news.category.id === categoryId);
+    try {
+      return mockNews.filter((news) => {
+        if (!news.category) {
+          console.warn(`News ${news.id} nie ma przypisanej kategorii`);
+          return false;
+        }
+        return news.category.id === categoryId;
+      });
+    } catch (error) {
+      console.error("Błąd podczas filtrowania newsów:", error);
+      return [];
+    }
   },
 
   getHotNews: async (): Promise<News[]> => {
@@ -44,7 +55,7 @@ export const newsService = {
 
     return mockNews.filter(
       (news) =>
-        news.id !== newsId && news.category.id === currentNews.category.id,
+        news.id !== newsId && news.category.id === currentNews.category.id
     );
   },
 };

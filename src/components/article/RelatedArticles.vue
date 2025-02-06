@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
   <div v-if="articles.length" class="mb-12">
-    <h3 class="text-2xl font-bold mb-4">Related Articles</h3>
+    <h3 class="text-2xl font-bold mb-4">Zobacz także</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div
         v-for="article in articles.slice(0, 3)"
