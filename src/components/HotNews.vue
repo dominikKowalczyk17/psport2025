@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useLoadingStore } from "@/store/loadingStore";
 import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
 
 const hotNews = ref<News[]>([]);
-const loading = ref(true);
 const error = ref<string | null>(null);
+const loadingStore = useLoadingStore();
 
 onMounted(async () => {
   try {
+    loadingStore.startLoading();
     hotNews.value = await newsService.getHotNews();
   } catch (e) {
     error.value = (e as Error).message;
     console.error("Error loading hot news:", e);
   } finally {
-    loading.value = false;
+    loadingStore.stopLoading();
   }
 });
 
@@ -40,19 +42,10 @@ function getGridClass(index: number): string {
   <section class="mb-12 mt-24">
     <h2 class="text-3xl font-semibold mb-4">Najważniejsze</h2>
 
-    <!-- Loading state -->
-    <div v-if="loading" class="flex justify-center items-center h-96">
-      <div
-        class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"
-      ></div>
-    </div>
-
-    <!-- Error state -->
-    <div v-else-if="error" class="text-red-500 p-4">
+    <div v-if="error" class="text-red-500 p-4">
       {{ error }}
     </div>
 
-    <!-- Content -->
     <div
       v-else
       class="grid grid-cols-1 md:grid-cols-12 md:grid-rows-6 gap-4 h-auto md:h-[800px]"
@@ -65,28 +58,30 @@ function getGridClass(index: number): string {
           getGridClass(index),
         ]"
       >
-        <div class="relative h-full">
-          <img
-            :src="news.thumbnailUrl"
-            :alt="news.title"
-            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"
-          ></div>
-          <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-            <p class="text-sm font-semibold mb-1">{{ news.category.title }}</p>
-            <h3
-              :class="[
-                'font-bold leading-tight mb-1',
-                index === 0 ? 'text-2xl' : 'text-lg',
-              ]"
-            >
-              {{ news.title }}
-            </h3>
-            <p v-if="index === 0" class="text-sm mt-2">{{ news.excerpt }}</p>
+        <router-link :to="{ name: 'news', params: { slug: news.slug } }">
+          <div class="relative h-full">
+            <img
+              :src="news.thumbnailUrl"
+              :alt="news.title"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"
+            ></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+              <p class="text-sm font-semibold mb-1">{{ news.category.title }}</p>
+              <h3
+                :class="[
+                  'font-bold leading-tight mb-1',
+                  index === 0 ? 'text-2xl' : 'text-lg',
+                ]"
+              >
+                {{ news.title }}
+              </h3>
+              <p v-if="index === 0" class="text-sm mt-2">{{ news.excerpt }}</p>
+            </div>
           </div>
-        </div>
+        </router-link>
       </article>
     </div>
   </section>

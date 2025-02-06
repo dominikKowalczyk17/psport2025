@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
+import { useLoadingStore } from "@/store/loadingStore";
 import type { Category } from "@/types/Category";
 import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
+import { videosService } from "@/mocks/services/videosService";
+import type { Video } from "@/types/Video";
 
 interface Props {
   category: Category;
@@ -16,36 +19,45 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const categoryNews = ref<News[]>([]);
-const loading = ref(true);
+const categoryVideos = ref<Video[]>([]);
 const error = ref<string | null>(null);
+const loadingStore = useLoadingStore();
 
 onMounted(async () => {
   try {
-    loading.value = true;
+    loadingStore.startLoading();
     if (props.category.id === 1) {
-      // Video section
-      const videos = await newsService.getNewsByCategory(props.category.id);
-      // Filter by videoCategory if provided
-      categoryNews.value = props.videoCategory
-        ? videos.filter((v) => v.tags.includes(props.videoCategory!))
-        : videos;
+      const videos = await videosService.getVideosByCategory(props.category.id);
+      const featuredVideos = await videosService.getFeaturedVideos(props.category.id);
+      categoryVideos.value = props.videoCategory
+        ? [...featuredVideos, ...videos].filter((v) =>
+            v.tags.includes(props.videoCategory!)
+          )
+        : [...featuredVideos, ...videos];
+      console.log("Pobrane wideo:", categoryVideos.value);
     } else {
-      const news = await newsService.getNewsByCategory(props.category.id);
-      categoryNews.value = news;
+      categoryNews.value = await newsService.getNewsByCategory(props.category.id);
+      console.log("Pobrane newsy:", categoryNews.value);
     }
   } catch (e) {
     error.value = (e as Error).message;
-    console.error(
-      `Error loading content for category ${props.category.title}:`,
-      e
-    );
+    console.error(`Error loading content for category ${props.category.title}:`, e);
   } finally {
-    loading.value = false;
+    loadingStore.stopLoading();
   }
 });
 
-const featuredItem = computed(() => categoryNews.value[0]);
-const remainingItems = computed(() => categoryNews.value.slice(1));
+const featuredItem = computed(() =>
+  props.category.id === 1
+    ? categoryVideos.value.find((video) => video.isFeatured)
+    : categoryNews.value.find((news) => news.isFeatured)
+);
+
+const remainingItems = computed(() =>
+  props.category.id === 1
+    ? categoryVideos.value.filter((video) => !video.isFeatured)
+    : categoryNews.value.filter((news) => !news.isFeatured)
+);
 </script>
 
 <template>
@@ -55,9 +67,10 @@ const remainingItems = computed(() => categoryNews.value.slice(1));
       <h2 class="text-3xl font-semibold mb-6">{{ title || category.title }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Featured Video -->
-        <div
+        <router-link
           v-if="featuredItem"
-          class="lg:col-span-2 lg:row-span-2 overflow-hidden group cursor-pointer rounded-lg bg-black"
+          :to="{ name: 'video', params: { id: featuredItem.id } }"
+          class="lg:col-span-2 lg:row-span-2 overflow-hidden group cursor-pointer rounded-lg bg-black block"
         >
           <div class="relative aspect-video">
             <img
@@ -75,11 +88,7 @@ const remainingItems = computed(() => categoryNews.value.slice(1));
                 stroke="currentColor"
               >
                 <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path
-                  d="M15 12L10 15V9L15 12Z"
-                  fill="currentColor"
-                  stroke="none"
-                />
+                <path d="M15 12L10 15V9L15 12Z" fill="currentColor" stroke="none" />
               </svg>
             </div>
             <div
@@ -102,13 +111,14 @@ const remainingItems = computed(() => categoryNews.value.slice(1));
               </div>
             </div>
           </div>
-        </div>
+        </router-link>
 
         <!-- Remaining Videos -->
-        <div
+        <router-link
           v-for="video in remainingItems"
           :key="video.id"
-          class="overflow-hidden group cursor-pointer rounded-lg bg-black"
+          :to="{ name: 'video', params: { id: video.id } }"
+          class="overflow-hidden group cursor-pointer rounded-lg bg-black block"
         >
           <div class="relative aspect-video">
             <img
@@ -126,19 +136,13 @@ const remainingItems = computed(() => categoryNews.value.slice(1));
                 stroke="currentColor"
               >
                 <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path
-                  d="M15 12L10 15V9L15 12Z"
-                  fill="currentColor"
-                  stroke="none"
-                />
+                <path d="M15 12L10 15V9L15 12Z" fill="currentColor" stroke="none" />
               </svg>
             </div>
             <div
               class="absolute bottom-0 left-0 right-0 p-3 text-white bg-gradient-to-t from-black to-transparent"
             >
-              <h3 class="text-lg font-bold mb-1 line-clamp-2">
-                {{ video.title }}
-              </h3>
+              <h3 class="text-lg font-bold mb-1 line-clamp-2">{{ video.title }}</h3>
               <div class="flex items-center space-x-3 text-sm">
                 <span class="flex items-center">
                   <svg
@@ -155,7 +159,7 @@ const remainingItems = computed(() => categoryNews.value.slice(1));
               </div>
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
     </template>
 
@@ -164,31 +168,43 @@ const remainingItems = computed(() => categoryNews.value.slice(1));
       <h2 class="text-3xl font-semibold mb-6">{{ category.title }}</h2>
       <div class="space-y-8">
         <div class="overflow-hidden rounded-lg bg-white shadow">
-          <div class="bg-primary text-primary-foreground px-6 py-4">
-            <h3 class="text-2xl font-semibold">{{ category.title }}</h3>
-          </div>
           <div class="p-4">
+            <!-- Pojedynczy news -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                v-for="(item, index) in categoryNews"
-                :key="index"
+              <router-link
+                v-for="item in categoryNews"
+                :key="item.id"
+                :to="{ name: 'news', params: { slug: item.slug } }"
                 class="flex items-center space-x-4 group cursor-pointer"
               >
-                <div
-                  class="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-md"
-                >
+                <!-- Opakowujemy obrazek w relative -->
+                <div class="relative w-60 h-60 flex-shrink-0 overflow-hidden rounded-md">
                   <img
                     :src="item.thumbnailUrl"
                     :alt="item.title"
                     class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-110"
                   />
+                  <!-- Gradient, podobny do tego w szablonie video -->
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
+                  ></div>
                 </div>
-                <p
-                  class="flex-grow text-sm group-hover:text-primary transition-colors duration-200"
-                >
-                  {{ item.title }}
-                </p>
-              </div>
+                <div>
+                  <p
+                    class="flex-grow text-sm group-hover:text-primary transition-colors duration-200"
+                  >
+                    {{ item.title }}
+                  </p>
+                  <p
+                    class="flex-grow text-sm group-hover:text-primary transition-colors duration-200"
+                  >
+                    {{ item.excerpt }}
+                  </p>
+                  <span>
+                    {{ new Date(item.publishDate).toLocaleTimeString() }}
+                  </span>
+                </div>
+              </router-link>
             </div>
           </div>
         </div>

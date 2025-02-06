@@ -1,3 +1,4 @@
+import type { Author } from './Author';
 import type { Category } from './Category';
 
 export interface Video {
@@ -6,10 +7,14 @@ export interface Video {
   description: string;
   url: string;
   thumbnailUrl: string;
-  duration: number; // w sekundach
+  duration: number;
   publishDate: Date;
   category: Category;
   views: number;
+  author: Author;
+  tags: string[];
+  isFeatured: boolean;
+  isHot: boolean;
 }
 
 export interface VideoState {
