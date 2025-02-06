@@ -21,7 +21,11 @@ watch(
 </script>
 
 <template>
-  <LoadingOverlay />
-  <Navbar :articleTitle="articleTitle" :readingProgress="readingProgress" />
-  <RouterView />
+  <div class="min-h-screen flex flex-col bg-gray-100">
+    <LoadingOverlay />
+    <Navbar :articleTitle="articleTitle" :readingProgress="readingProgress" />
+    <main class="flex-grow">
+      <RouterView />
+    </main>
+  </div>
 </template>

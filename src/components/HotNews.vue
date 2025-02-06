@@ -19,66 +19,51 @@ onMounted(async () => {
     loadingStore.stopLoading();
   }
 });
-
-function getGridClass(index: number): string {
-  switch (index) {
-    case 0:
-      return "md:col-span-6 md:row-span-4";
-    case 1:
-    case 2:
-      return "md:col-span-3 md:row-span-2";
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-      return "md:col-span-3 md:row-span-2";
-    default:
-      return "md:col-span-2 md:row-span-2";
-  }
-}
 </script>
 
 <template>
-  <section class="mb-12 mt-24">
-    <h2 class="text-3xl font-semibold mb-4">Najważniejsze</h2>
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold mb-6 text-center">
+      <span
+        class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400"
+      >
+        Breaking News
+      </span>
+    </h2>
 
     <div v-if="error" class="text-red-500 p-4">
       {{ error }}
     </div>
 
-    <div
-      v-else
-      class="grid grid-cols-1 md:grid-cols-12 md:grid-rows-6 gap-4 h-auto md:h-[800px]"
-    >
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <article
-        v-for="(news, index) in hotNews"
+        v-for="(news, index) in hotNews.slice(0, 3)"
         :key="news.id"
-        :class="[
-          'relative overflow-hidden rounded-lg cursor-pointer group',
-          getGridClass(index),
-        ]"
+        class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105"
       >
         <router-link :to="{ name: 'news', params: { slug: news.slug } }">
-          <div class="relative h-full">
+          <div class="relative">
             <img
               :src="news.thumbnailUrl"
               :alt="news.title"
-              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              class="w-full h-48 object-cover"
             />
             <div
-              class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"
-            ></div>
-            <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-              <p class="text-sm font-semibold mb-1">{{ news.category.title }}</p>
-              <h3
-                :class="[
-                  'font-bold leading-tight mb-1',
-                  index === 0 ? 'text-2xl' : 'text-lg',
-                ]"
-              >
-                {{ news.title }}
-              </h3>
-              <p v-if="index === 0" class="text-sm mt-2">{{ news.excerpt }}</p>
+              class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 text-sm font-bold"
+            >
+              HOT
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-xl font-bold mb-2 line-clamp-2">
+              {{ news.title }}
+            </h3>
+            <p class="text-gray-600 mb-4 line-clamp-3">{{ news.excerpt }}</p>
+            <div
+              class="flex justify-between items-center text-sm text-gray-500"
+            >
+              <span>{{ news.category.title }}</span>
+              <span>{{ new Date(news.publishDate).toLocaleString() }}</span>
             </div>
           </div>
         </router-link>
