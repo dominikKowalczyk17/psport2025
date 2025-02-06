@@ -1,20 +1,20 @@
 // src/mocks/data/authors.ts
-import type { Author } from '@/types/Author';
+import type { Author } from "@/types/Author";
 
 export const authors: Author[] = [
   {
     id: 1,
     name: "Marcin Kowalski",
-    avatar: "/images/authors/mkowalski.jpg"
+    avatar: "/placeholder-user.jpg",
   },
   {
     id: 2,
     name: "Anna Nowak",
-    avatar: "/images/authors/anowak.jpg"
+    avatar: "/placeholder-user.jpg",
   },
   {
     id: 3,
     name: "Piotr Wiśniewski",
-    avatar: "/images/authors/pwisniewki.jpg"
-  }
+    avatar: "/placeholder-user.jpg",
+  },
 ];

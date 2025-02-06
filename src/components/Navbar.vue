@@ -24,23 +24,11 @@ onMounted(async () => {
       '--header-sub-height': '45px',
     }"
   >
-    <!-- Sub Header -->
-    <div class="absolute top-0 left-0 right-0 h-[var(--header-sub-height)] bg-dark-blue">
-      <div class="inside flex justify-end">
-        <div
-          v-if="!isAMP"
-          class="absolute top-1/2 right-[var(--page-padding)] -translate-y-1/2 flex gap-2.5"
-        >
-          <!-- Przyciski -->
-        </div>
-      </div>
-    </div>
-
     <!-- Main Header -->
     <div
-      class="absolute top-0 right-0 left-0 bottom-0 z-[1] h-[var(--header-main-height)] mt-[var(--header-sub-height)] bg-white shadow-lg"
+      class="absolute top-0 right-0 left-0 bottom-0 z-[1] h-[var(--header-main-height)] bg-white shadow-lg"
     >
-      <div class="inside--header relative z-[2] h-[45px] mx-auto max-w-[1300px]">
+      <div class="inside--header z-[2] h-[45px] mx-auto max-w-[1300px]">
         <label class="hidden" for="header_state" tabindex="0">Menu</label>
 
         <!-- Logo -->
@@ -61,10 +49,15 @@ onMounted(async () => {
           <ul class="flex gap-2">
             <!-- Elementy menu -->
             <li v-for="item in menuItems" :key="item.id" class="relative group">
-              <input :id="`nav_${item.id}`" type="checkbox" class="sr-only peer" />
-              <a class="px-3 py-2 hover:text-blue-500 cursor-pointer font-bold">{{
-                item.title
-              }}</a>
+              <input
+                :id="`nav_${item.id}`"
+                type="checkbox"
+                class="sr-only peer"
+              />
+              <a
+                class="px-3 py-2 hover:text-blue-500 cursor-pointer font-bold"
+                >{{ item.title }}</a
+              >
               <label
                 :for="`nav_${item.id}`"
                 class="absolute inset-0 cursor-pointer hover:text-blue-700 peer"
@@ -107,7 +100,9 @@ onMounted(async () => {
           class="flex-1 px-4 py-2 border rounded-l"
           placeholder="szukaj w serwisie"
         />
-        <button class="px-6 py-2 bg-blue-500 text-white rounded-r">Szukaj</button>
+        <button class="px-6 py-2 bg-blue-500 text-white rounded-r">
+          Szukaj
+        </button>
       </div>
     </form>
 
