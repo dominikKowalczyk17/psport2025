@@ -4,16 +4,15 @@ import CategorySection from "@/components/CategorySection.vue";
 import type { Category } from "@/types/Category";
 import { categoryService } from "@/mocks/services/categoryService";
 import HotNews from "@/components/HotNews.vue";
+import FeaturedArticle from "@/components/article/FeaturedArticle.vue";
 
 const categories = ref<Category[]>([]);
 const error = ref<string | null>(null);
 
-// Znajdujemy kategorię wideo (id: 1)
 const videoCategory = computed(() =>
   categories.value.find((cat) => cat.id === 1)
 );
 
-// Filtrujemy kategorie newsów (wszystkie oprócz wideo)
 const newsCategories = computed(() =>
   categories.value.filter((cat) => cat.id !== 1)
 );
@@ -29,29 +28,42 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="container relative float-left w-full overflow-hidden">
-    <section class="inside mx-auto max-w-[1280px] mt-[10px] px-[30px]">
-      <!-- Error state -->
-      <div v-if="error" class="text-red-500 p-4">
-        {{ error }}
-      </div>
+  <div class="container mx-auto px-4 py-8 mt-36">
+    <div
+      v-if="error"
+      class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8"
+      role="alert"
+    >
+      <p class="font-bold">Error</p>
+      <p>{{ error }}</p>
+    </div>
 
-      <!-- Content -->
-      <template v-else>
-        <HotNews />
-        <!-- Video sections -->
+    <template v-else>
+      <HotNews class="mb-12" />
+
+      <FeaturedArticle class="mb-12" />
+
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <CategorySection
           v-if="videoCategory"
           :category="videoCategory"
-          title="Polecane Wideo"
+          title="Featured Videos"
+          class="md:col-span-2"
         />
-        <!-- News sections -->
         <CategorySection
-          v-for="category in newsCategories"
+          v-for="category in newsCategories.slice(0, 2)"
           :key="category.id"
           :category="category"
         />
-      </template>
-    </section>
-  </main>
+      </section>
+
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <CategorySection
+          v-for="category in newsCategories.slice(2)"
+          :key="category.id"
+          :category="category"
+        />
+      </section>
+    </template>
+  </div>
 </template>
