@@ -5,16 +5,16 @@ export const authors: Author[] = [
   {
     id: 1,
     name: "Marcin Kowalski",
-    avatar: "/placeholder-user.jpg",
+    avatar: "/authorAvatar.svg",
   },
   {
     id: 2,
     name: "Anna Nowak",
-    avatar: "/placeholder-user.jpg",
+    avatar: "/authorAvatar.svg",
   },
   {
     id: 3,
     name: "Piotr Wiśniewski",
-    avatar: "/placeholder-user.jpg",
+    avatar: "/authorAvatar.svg",
   },
 ];

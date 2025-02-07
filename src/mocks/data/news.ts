@@ -333,6 +333,54 @@ export const mockNews: News[] = [
     isHot: false,
     isFeatured: true,
   },
+  {
+    id: 18,
+    title: "Lewandowski z hat-trickiem w El Clasico",
+    slug: "lewandowski-hat-trick-el-clasico-2025",
+    excerpt:
+      "Polski napastnik zdobył trzy bramki w meczu z Realem Madryt, prowadząc Barcelonę do zwycięstwa 4:2",
+    content:
+      "Robert Lewandowski pokazał swoją klasę strzelecką w kolejnym El Clasico...",
+    publishDate: new Date("2025-02-05T20:00:00"),
+    modifiedDate: new Date("2025-02-05T20:30:00"),
+    author: authors[0],
+    category: categories[1],
+    url: "/pilka-nozna/lewandowski-hat-trick-el-clasico-2025",
+    imageUrl: "/placeholder.svg",
+    thumbnailUrl: "/placeholder.svg",
+    tags: ["La Liga", "Barcelona", "Real Madryt", "El Clasico", "Lewandowski"],
+    isHot: true,
+    isFeatured: true,
+    gallery: [
+      {
+        thumbnail: "/placeholder.svg",
+        full: "/placeholder.svg",
+        caption: "Lewandowski celebruje pierwszą bramkę",
+      },
+      {
+        thumbnail: "/placeholder.svg",
+        full: "/placeholder.svg",
+        caption: "Spektakularny strzał na 2:0",
+      },
+      {
+        thumbnail: "/placeholder.svg",
+        full: "/placeholder.svg",
+        caption: "Radość po hat-tricku",
+      },
+    ],
+    quotes: [
+      {
+        text: "To był jeden z moich najlepszych występów w barwach Barcelony",
+        author: "Robert Lewandowski",
+        position: "Napastnik FC Barcelona",
+      },
+      {
+        text: "Lewandowski pokazał dziś, dlaczego jest jednym z najlepszych napastników na świecie",
+        author: "Xavi Hernandez",
+        position: "Trener FC Barcelona",
+      },
+    ],
+  },
 ];
 
 // Zachowujemy initialState bez zmian

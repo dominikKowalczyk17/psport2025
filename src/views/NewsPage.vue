@@ -13,6 +13,9 @@ import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
 import ArticleHero from "@/components/article/ArticleHero.vue";
 import RelatedArticles from "@/components/article/RelatedArticles.vue";
+import ArticleGallery from "@/components/article/ArticleGallery.vue";
+import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import ArticleQuote from "@/components/article/ArticleQuote.vue";
 
 const route = useRoute();
 const newsSlug = route.params.slug as string;
@@ -161,6 +164,21 @@ const toggleShareMenu = () => {
           class="w-full h-auto rounded-lg shadow-lg"
         />
         <p class="text-sm text-gray-600 mt-2">"{{ article.title }}"</p>
+      </div>
+
+      <!-- Gallery Section -->
+      <ArticleGallery
+        v-if="article.gallery && article.gallery.length > 0"
+        :images="article.gallery"
+      />
+
+      <!-- Quotes -->
+      <div v-if="article.quotes && article.quotes.length > 0" class="mb-12">
+        <ArticleQuote
+          v-for="(quote, index) in article.quotes"
+          :key="index"
+          v-bind="quote"
+        />
       </div>
 
       <!-- Related Articles -->
