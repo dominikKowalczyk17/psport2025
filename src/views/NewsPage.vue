@@ -13,7 +13,6 @@ import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
 import ArticleHero from "@/components/article/ArticleHero.vue";
 import RelatedArticles from "@/components/article/RelatedArticles.vue";
-import ShareMenu from "@/components/article/ShareMenu.vue";
 
 const route = useRoute();
 const newsSlug = route.params.slug as string;

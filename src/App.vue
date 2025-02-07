@@ -25,7 +25,7 @@ watch(
     <LoadingOverlay />
     <Navbar :articleTitle="articleTitle" :readingProgress="readingProgress" />
     <main class="flex-grow">
-      <RouterView />
+      <RouterView :key="$route.fullPath" />
     </main>
   </div>
 </template>
