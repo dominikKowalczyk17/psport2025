@@ -1,3 +1,4 @@
+```typescript
 <script setup lang="ts">
 import {
   ref,
@@ -9,26 +10,25 @@ import {
   type Ref,
 } from "vue";
 import { useRoute } from "vue-router";
+import { useLoadingStore } from "@/store/loadingStore";
 import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
 import ArticleHero from "@/components/article/ArticleHero.vue";
 import RelatedArticles from "@/components/article/RelatedArticles.vue";
 import ArticleGallery from "@/components/article/ArticleGallery.vue";
-import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import ArticleQuote from "@/components/article/ArticleQuote.vue";
 
 const route = useRoute();
+const loadingStore = useLoadingStore();
 const newsSlug = route.params.slug as string;
 
 const article = ref<News | null>(null);
 const relatedArticles = ref<News[]>([]);
-const loading = ref(true);
 const error = ref<string | null>(null);
 
 const articleTitle = inject("articleTitle") as Ref<string | undefined>;
 const readingProgress = inject("readingProgress") as Ref<number>;
 
-// Obliczanie sekcji z contentu
 const sections = computed(() => {
   if (!article.value) return [];
   const contentParagraphs = article.value.content.split("\n\n");
@@ -39,10 +39,9 @@ const sections = computed(() => {
   }));
 });
 
-// Ładowanie artykułu
 onMounted(async () => {
   try {
-    loading.value = true;
+    loadingStore.startLoading();
     const articleData = await newsService.getNewsBySlug(newsSlug);
 
     if (!articleData) {
@@ -51,7 +50,6 @@ onMounted(async () => {
 
     article.value = articleData;
 
-    // Pobierz powiązane artykuły
     const allNews = await newsService.getNews();
     relatedArticles.value = allNews
       .filter(
@@ -63,13 +61,12 @@ onMounted(async () => {
     error.value = (e as Error).message;
     console.error("Error loading article:", e);
   } finally {
-    loading.value = false;
+    loadingStore.stopLoading();
   }
 
   window.addEventListener("scroll", handleScroll);
 });
 
-// Obsługa tytułu artykułu
 watch(
   () => article.value,
   (newArticle) => {
@@ -82,13 +79,11 @@ watch(
   { immediate: true }
 );
 
-// Czyszczenie
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
   articleTitle.value = undefined;
 });
 
-// Aktualizacja postępu czytania
 const handleScroll = () => {
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
@@ -104,11 +99,7 @@ const toggleShareMenu = () => {
 </script>
 
 <template>
-  <div v-if="loading" class="flex justify-center items-center min-h-screen">
-    <LoadingSpinner />
-  </div>
-
-  <div v-else-if="error" class="flex justify-center items-center min-h-screen">
+  <div v-if="error" class="flex justify-center items-center min-h-screen">
     <div class="text-xl text-red-600">{{ error }}</div>
   </div>
 
@@ -116,7 +107,6 @@ const toggleShareMenu = () => {
     <ArticleHero :article="article" />
 
     <div class="max-w-4xl mx-auto px-4">
-      <!-- Table of Contents -->
       <nav class="mb-8 p-4 bg-gray-100 rounded-lg">
         <h3 class="text-lg font-bold mb-2">W tym artykule</h3>
         <ul class="space-y-1">
@@ -133,7 +123,6 @@ const toggleShareMenu = () => {
         </ul>
       </nav>
 
-      <!-- Article Content -->
       <div class="prose prose-lg max-w-none mb-12">
         <div class="flex flex-wrap gap-2 mb-6">
           <span
@@ -156,7 +145,6 @@ const toggleShareMenu = () => {
         </div>
       </div>
 
-      <!-- Featured Image -->
       <div v-if="article.imageUrl" class="mb-12">
         <img
           :src="article.imageUrl"
@@ -166,13 +154,11 @@ const toggleShareMenu = () => {
         <p class="text-sm text-gray-600 mt-2">"{{ article.title }}"</p>
       </div>
 
-      <!-- Gallery Section -->
       <ArticleGallery
         v-if="article.gallery && article.gallery.length > 0"
         :images="article.gallery"
       />
 
-      <!-- Quotes -->
       <div v-if="article.quotes && article.quotes.length > 0" class="mb-12">
         <ArticleQuote
           v-for="(quote, index) in article.quotes"
@@ -181,11 +167,9 @@ const toggleShareMenu = () => {
         />
       </div>
 
-      <!-- Related Articles -->
       <RelatedArticles id="related-articles" :articles="relatedArticles" />
     </div>
 
-    <!-- Floating Share Button -->
     <button
       @click="toggleShareMenu"
       class="fixed bottom-8 right-8 bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700"
@@ -207,3 +191,4 @@ const toggleShareMenu = () => {
     </button>
   </article>
 </template>
+```
