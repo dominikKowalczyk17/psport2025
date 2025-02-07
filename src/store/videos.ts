@@ -1,26 +1,26 @@
 import { defineStore } from "pinia";
-import type { Video, VideoState, } from "../types/Video";
+import type { Video, VideoState } from "../types/Video";
 
-export const useVideoStore = defineStore('videos', {
+export const useVideoStore = defineStore("videos", {
   state: (): VideoState => ({
     videosByCategory: {},
     featuredVideos: {},
     currentVideo: null,
     loading: false,
-    error: null
+    error: null,
   }),
   actions: {
-    async fetchNewsByCategory(category: string): Promise<void> {
-      this.loading = true;
-      try {
-        const response = await api.getNewsByCategory(category);
-        this.videosByCategory[category] = response.data;
-      } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Problem with fetching videos';
-      } finally {
-        this.loading = false;
-      }
-    },
+    // async fetchNewsByCategory(category: string): Promise<void> {
+    //   this.loading = true;
+    //   try {
+    //     const response = await api.getNewsByCategory(category);
+    //     this.videosByCategory[category] = response.data;
+    //   } catch (error) {
+    //     this.error = error instanceof Error ? error.message : 'Problem with fetching videos';
+    //   } finally {
+    //     this.loading = false;
+    //   }
+    // },
 
     async fetchCurrentNews(videoId: number): Promise<void> {
       // implementacja
@@ -28,7 +28,7 @@ export const useVideoStore = defineStore('videos', {
 
     setCurrentNews(video: Video): void {
       this.currentVideo = video;
-    }
+    },
   },
   getters: {
     getVideosByCategory: (state: VideoState) => {
@@ -45,6 +45,6 @@ export const useVideoStore = defineStore('videos', {
 
     isVideoLoading(): boolean {
       return this.loading;
-    }
-  }
+    },
+  },
 });
