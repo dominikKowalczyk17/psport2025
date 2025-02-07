@@ -18,17 +18,22 @@ defineProps<{
         :key="article.id"
         class="bg-white rounded-lg shadow-md overflow-hidden"
       >
-        <img
-          :src="article.thumbnailUrl"
-          :alt="article.title"
-          class="w-full h-48 object-cover"
-        />
-        <div class="p-4">
-          <h4 class="font-bold text-lg mb-2">{{ article.title }}</h4>
-          <p class="text-sm text-gray-600">
-            {{ formatDateForDisplay(article.publishDate) }}
-          </p>
-        </div>
+        <router-link
+          :to="{ name: 'news', params: { slug: article.slug } }"
+          class="group"
+        >
+          <img
+            :src="article.thumbnailUrl"
+            :alt="article.title"
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-4">
+            <h4 class="font-bold text-lg mb-2">{{ article.title }}</h4>
+            <p class="text-sm text-gray-600">
+              {{ formatDateForDisplay(article.publishDate) }}
+            </p>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
