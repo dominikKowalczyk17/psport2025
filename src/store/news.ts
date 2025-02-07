@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import type { News, NewsState } from '@/types/News';
+import { defineStore } from "pinia";
+import type { News, NewsState } from "@/types/News";
 
-export const useNewsStore = defineStore('news', {
+export const useNewsStore = defineStore("news", {
   state: (): NewsState => ({
     newsByCategory: {},
     hotNews: [],
@@ -9,21 +9,21 @@ export const useNewsStore = defineStore('news', {
     currentNews: null,
     relatedNews: [],
     loading: false,
-    error: null
+    error: null,
   }),
 
   actions: {
-    async fetchNewsByCategory(category: string): Promise<void> {
-      this.loading = true;
-      try {
-        const response = await api.getNewsByCategory(category);
-        this.newsByCategory[category] = response.data;
-      } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Unknown error';
-      } finally {
-        this.loading = false;
-      }
-    },
+    // async fetchNewsByCategory(category: string): Promise<void> {
+    //   this.loading = true;
+    //   try {
+    //     const response = await api.getNewsByCategory(category);
+    //     this.newsByCategory[category] = response.data;
+    //   } catch (error) {
+    //     this.error = error instanceof Error ? error.message : 'Unknown error';
+    //   } finally {
+    //     this.loading = false;
+    //   }
+    // },
 
     async fetchCurrentNews(newsId: number): Promise<void> {
       // implementacja
@@ -31,7 +31,7 @@ export const useNewsStore = defineStore('news', {
 
     setCurrentNews(news: News): void {
       this.currentNews = news;
-    }
+    },
   },
 
   getters: {
@@ -49,6 +49,6 @@ export const useNewsStore = defineStore('news', {
 
     isNewsLoading(): boolean {
       return this.loading;
-    }
-  }
+    },
+  },
 });
