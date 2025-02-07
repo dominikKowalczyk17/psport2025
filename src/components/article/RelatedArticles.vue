@@ -16,7 +16,7 @@ defineProps<{
       <div
         v-for="article in articles.slice(0, 3)"
         :key="article.id"
-        class="bg-white rounded-lg shadow-md overflow-hidden"
+        class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
       >
         <router-link
           :to="{ name: 'news', params: { slug: article.slug } }"

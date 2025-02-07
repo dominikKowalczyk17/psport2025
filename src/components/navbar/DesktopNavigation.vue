@@ -12,11 +12,12 @@ defineProps<{
   <nav>
     <ul class="flex items-center gap-1">
       <li v-for="item in items" :key="item.id" class="relative group">
-        <a
+        <router-link
           class="block px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap"
+          :to="{ name: 'category', params: { id: item.id } }"
         >
           {{ item.title }}
-        </a>
+        </router-link>
 
         <!-- Submenu -->
         <div
