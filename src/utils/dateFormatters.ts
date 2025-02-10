@@ -20,3 +20,13 @@ export function formatDateForDateTime(date: Date): string {
       minute: '2-digit'
     });
   }
+
+  export function formatViews (views: number) {
+    if (views >= 1000000) {
+      return `${(views / 1000000).toFixed(1)}M`;
+    }
+    if (views >= 1000) {
+      return `${(views / 1000).toFixed(1)}K`;
+    }
+    return views.toLocaleString();
+  };
