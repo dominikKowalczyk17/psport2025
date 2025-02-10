@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, shallowRef } from "vue";
 import { useRoute } from "vue-router";
 import { useNewsStore } from "@/store/news";
 import { useLoadingStore } from "@/store/loadingStore";
@@ -7,10 +7,12 @@ import { newsService } from "@/mocks/services/newsService";
 import { categoryService } from "@/mocks/services/categoryService";
 import type { News } from "@/types/News";
 import type { Category } from "@/types/Category";
+import VideoPage from "./VideoPage.vue";
 
 const route = useRoute();
 const newsStore = useNewsStore();
 const loadingStore = useLoadingStore();
+const currentComponent = shallowRef<any>(null);
 
 const category = ref<Category | null>(null);
 const error = ref<string | null>(null);
@@ -24,8 +26,13 @@ onMounted(async () => {
       categoryService.getCategories(),
       newsService.getNewsByCategory(categoryId.value),
     ]);
-    category.value =
-      categoryData.find((c) => c.id === categoryId.value) || null;
+    category.value = categoryData.find((c) => c.id === categoryId.value) || null;
+
+    // Sprawdzamy czy to kategoria video (id: 1)
+    if (categoryId.value === 1) {
+      currentComponent.value = VideoPage;
+    }
+
     newsStore.$patch((state) => {
       state.newsByCategory[categoryId.value] = newsData;
     });
@@ -36,9 +43,7 @@ onMounted(async () => {
   }
 });
 
-const news = computed(() =>
-  newsStore.getNewsByCategory(categoryId.value.toString())
-);
+const news = computed(() => newsStore.getNewsByCategory(categoryId.value.toString()));
 
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString("pl-PL", {
@@ -54,6 +59,7 @@ const formatDate = (date: Date) => {
     <div v-if="error" class="text-center text-red-600">
       <p>{{ error }}</p>
     </div>
+    <component v-else-if="currentComponent" :is="currentComponent" />
     <template v-else>
       <h1 class="text-3xl font-bold mb-6">
         {{ category?.title || "Kategoria" }}

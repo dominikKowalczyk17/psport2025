@@ -4,6 +4,7 @@ import { newsService } from '@/mocks/services/newsService';
 import MainPage from '@/views/MainPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
 import NewsPage from '@/views/NewsPage.vue';
+import VideoPage from '@/views/VideoPage.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -40,7 +41,7 @@ const router = createRouter({
     {
       path: '/video/:id',
       name: 'video',
-      component: NewsPage,
+      component: VideoPage,
     },
   ],
 });

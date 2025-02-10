@@ -9,13 +9,9 @@ import FeaturedArticle from "@/components/article/FeaturedArticle.vue";
 const categories = ref<Category[]>([]);
 const error = ref<string | null>(null);
 
-const videoCategory = computed(() =>
-  categories.value.find((cat) => cat.id === 1)
-);
+const videoCategory = computed(() => categories.value.find((cat) => cat.id === 1));
 
-const newsCategories = computed(() =>
-  categories.value.filter((cat) => cat.id !== 1)
-);
+const newsCategories = computed(() => categories.value.filter((cat) => cat.id !== 1));
 
 onMounted(async () => {
   try {
@@ -47,7 +43,7 @@ onMounted(async () => {
         <CategorySection
           v-if="videoCategory"
           :category="videoCategory"
-          title="Featured Videos"
+          title="Polecane Wideo"
           class="md:col-span-2"
         />
         <CategorySection

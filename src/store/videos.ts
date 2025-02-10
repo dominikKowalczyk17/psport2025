@@ -1,7 +1,9 @@
-import { defineStore } from "pinia";
-import type { Video, VideoState } from "../types/Video";
+// src/store/videoStore.ts
+import { defineStore } from 'pinia';
+import type { Video, VideoState } from '@/types/Video';
+import { videosService } from '@/mocks/services/videosService';
 
-export const useVideoStore = defineStore("videos", {
+export const useVideoStore = defineStore('videos', {
   state: (): VideoState => ({
     videosByCategory: {},
     featuredVideos: {},
@@ -9,42 +11,45 @@ export const useVideoStore = defineStore("videos", {
     loading: false,
     error: null,
   }),
+
   actions: {
-    // async fetchNewsByCategory(category: string): Promise<void> {
-    //   this.loading = true;
-    //   try {
-    //     const response = await api.getNewsByCategory(category);
-    //     this.videosByCategory[category] = response.data;
-    //   } catch (error) {
-    //     this.error = error instanceof Error ? error.message : 'Problem with fetching videos';
-    //   } finally {
-    //     this.loading = false;
-    //   }
-    // },
+    async fetchCurrentVideo(videoId: number): Promise<void> {
+      this.loading = true;
+      this.error = null;
 
-    async fetchCurrentNews(videoId: number): Promise<void> {
-      // implementacja
+      try {
+        const video = await videosService.getVideoById(videoId);
+        if (video) {
+          // Add placeholder video URL if not present
+          this.currentVideo = {
+            ...video,
+            url:
+              video.url ||
+              'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            thumbnailUrl:
+              video.thumbnailUrl ||
+              'https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+          };
+        } else {
+          throw new Error('Video not found');
+        }
+      } catch (error) {
+        this.error =
+          error instanceof Error
+            ? error.message
+            : 'Problem with fetching video';
+        this.currentVideo = null;
+      } finally {
+        this.loading = false;
+      }
     },
 
-    setCurrentNews(video: Video): void {
-      this.currentVideo = video;
-    },
+    // ... rest of your store actions
   },
+
   getters: {
-    getVideosByCategory: (state: VideoState) => {
-      return (category: string): Video[] => {
-        return state.videosByCategory[category] || [];
-      };
-    },
-
-    getFeaturedVideosByCategory: (state: VideoState) => {
-      return (category: string): Video[] => {
-        return state.featuredVideos[category] || [];
-      };
-    },
-
-    isVideoLoading(): boolean {
-      return this.loading;
-    },
+    isLoading: (state): boolean => state.loading,
+    hasError: (state): boolean => state.error !== null,
+    getError: (state): string | null => state.error,
   },
 });

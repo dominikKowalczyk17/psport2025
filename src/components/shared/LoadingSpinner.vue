@@ -1,3 +1,5 @@
+//src/components/shared/LoadingSpinner.vue
+
 <script setup lang="ts">
 interface Props {
   height?: string;
