@@ -1,5 +1,5 @@
-import type { Author } from './Author';
-import type { Category } from './Category';
+import type { Author } from "./Author";
+import type { Category } from "./Category";
 
 export interface News {
   id: number;
@@ -11,12 +11,14 @@ export interface News {
   modifiedDate?: Date;
   author: Author;
   category: Category;
-  url: string,
+  url: string;
   imageUrl: string;
   thumbnailUrl: string;
   tags: string[];
   isHot: boolean;
   isFeatured: boolean;
+  gallery?: NewsGalleryImage[];
+  quotes?: NewsQuote[];
 }
 
 export interface NewsState {
@@ -27,4 +29,16 @@ export interface NewsState {
   relatedNews: News[];
   loading: boolean;
   error: string | null;
+}
+
+export interface NewsGalleryImage {
+  thumbnail: string;
+  full: string;
+  caption: string;
+}
+
+export interface NewsQuote {
+  text: string;
+  author?: string;
+  position?: string;
 }
