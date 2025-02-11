@@ -3,7 +3,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
-import VideoList from "@/components/videoPlayer/VideoList.vue";
+import VideoList from "@/components/videoplayer/VideoList.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import { useVideoStore } from "@/store/videos";
 import VideoDetails from "@/components/videoplayer/VideoDetails.vue";
