@@ -5,6 +5,7 @@ import MainPage from '@/views/MainPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
 import NewsPage from '@/views/NewsPage.vue';
 import VideoPage from '@/views/VideoPage.vue';
+import VideoTarget from '@/views/VideoTarget.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,14 @@ const router = createRouter({
       path: '/category/:id',
       name: 'category',
       component: CategoryPage,
+      beforeEnter: (to, from, next) => {
+        const categoryId = parseInt(to.params.id as string);
+        if (categoryId === 1) {
+          next({ name: 'videos' });
+        } else {
+          next();
+        }
+      },
       props: (route) => ({
         categoryId: parseInt(route.params.id as string),
       }),
@@ -26,35 +35,32 @@ const router = createRouter({
       path: '/news/:slug',
       name: 'news',
       component: NewsPage,
-      async beforeEnter(to) {
-        const allNews = await newsService.getNews();
-        const news = allNews.find((n) => n.slug === to.params.slug);
-        if (!news) {
-          return { name: 'home' };
-        }
-        return true;
-      },
       props: (route) => ({
         newsSlug: route.params.slug,
       }),
     },
     {
+      path: '/video',
+      name: 'videos',
+      component: VideoPage,
+    },
+    {
       path: '/video/:id',
       name: 'video',
-      component: VideoPage,
+      component: VideoTarget,
+      props: (route) => ({
+        videoId: parseInt(route.params.id as string),
+      }),
     },
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  const loadingStore = useLoadingStore();
-  loadingStore.startLoading();
-  next();
-});
-
 router.afterEach(() => {
   const loadingStore = useLoadingStore();
-  setTimeout(() => loadingStore.stopLoading(), 500);
+  // Dodaj małe opóźnienie, żeby uniknąć migotania podczas szybkich przejść
+  setTimeout(() => {
+    loadingStore.stopLoading();
+  }, 500);
 });
 
 export default router;
