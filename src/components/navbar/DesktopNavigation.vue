@@ -14,7 +14,11 @@ defineProps<{
       <li v-for="item in items" :key="item.id" class="relative group">
         <router-link
           class="block px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap"
-          :to="{ name: 'category', params: { id: item.id } }"
+          :to="
+            item.id === 1
+              ? { name: 'videos' }
+              : { name: 'category', params: { id: item.id } }
+          "
         >
           {{ item.title }}
         </router-link>
