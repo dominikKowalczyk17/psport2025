@@ -1,7 +1,7 @@
-// stores/loadingStore.ts
-import { defineStore } from "pinia";
+// src/store/loadingStore.ts
+import { defineStore } from 'pinia';
 
-export const useLoadingStore = defineStore("loading", {
+export const useLoadingStore = defineStore('loading', {
   state: () => ({
     globalLoading: false,
     loadingCount: 0,

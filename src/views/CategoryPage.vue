@@ -5,9 +5,7 @@ import { useNewsStore } from "@/store/news";
 import { useLoadingStore } from "@/store/loadingStore";
 import { newsService } from "@/mocks/services/newsService";
 import { categoryService } from "@/mocks/services/categoryService";
-import type { News } from "@/types/News";
 import type { Category } from "@/types/Category";
-import VideoPage from "./VideoPage.vue";
 
 const route = useRoute();
 const newsStore = useNewsStore();
@@ -27,11 +25,6 @@ onMounted(async () => {
       newsService.getNewsByCategory(categoryId.value),
     ]);
     category.value = categoryData.find((c) => c.id === categoryId.value) || null;
-
-    // Sprawdzamy czy to kategoria video (id: 1)
-    if (categoryId.value === 1) {
-      currentComponent.value = VideoPage;
-    }
 
     newsStore.$patch((state) => {
       state.newsByCategory[categoryId.value] = newsData;
