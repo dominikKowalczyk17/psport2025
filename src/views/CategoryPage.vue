@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, shallowRef } from "vue";
+import { ref, onMounted, computed, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useNewsStore } from "@/store/news";
 import { useLoadingStore } from "@/store/loadingStore";
@@ -15,28 +15,38 @@ const currentComponent = shallowRef<any>(null);
 const category = ref<Category | null>(null);
 const error = ref<string | null>(null);
 
-const categoryId = computed(() => Number(route.params.id));
+const categoryHref = computed(() => route.params.href as string);
 
-onMounted(async () => {
+const fetchCategoryData = async () => {
   loadingStore.startLoading();
   try {
-    const [categoryData, newsData] = await Promise.all([
-      categoryService.getCategories(),
-      newsService.getNewsByCategory(categoryId.value),
-    ]);
-    category.value = categoryData.find((c) => c.id === categoryId.value) || null;
-
-    newsStore.$patch((state) => {
-      state.newsByCategory[categoryId.value] = newsData;
-    });
+    const categories = await categoryService.getCategories();
+    category.value = categories.find((c) => c.href === categoryHref.value) || null;
+    if (category.value) {
+      const newsData = await newsService.getNewsByCategory(category.value.id);
+      newsStore.$patch((state) => {
+        state.newsByCategory[category.value!.id] = newsData;
+      });
+    } else {
+      error.value = "Category not found";
+    }
   } catch (e) {
     error.value = "Failed to load category news";
   } finally {
     loadingStore.stopLoading();
   }
-});
+};
 
-const news = computed(() => newsStore.getNewsByCategory(categoryId.value.toString()));
+onMounted(fetchCategoryData);
+
+watch(categoryHref, fetchCategoryData);
+
+const news = computed(() => {
+  if (category.value) {
+    return newsStore.getNewsByCategory(category.value.id.toString());
+  }
+  return [];
+});
 
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString("pl-PL", {

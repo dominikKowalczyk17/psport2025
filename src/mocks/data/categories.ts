@@ -43,17 +43,17 @@ export const categories: Category[] = [
       { title: 'PlusLiga', href: 'plusliga' },
       {
         title: 'Reprezentacja mężczyzn',
-        href: 'reprezentacja-siatkarzy/',
+        href: 'reprezentacja-mezczyzn',
       },
-      { title: 'Reprezentacja kobiet', href: 'reprezentacja-siatkarek' },
+      { title: 'Reprezentacja kobiet', href: 'reprezentacja-kobiet' },
       { title: 'TAURON Liga', href: 'liga-siatkowki-kobiet' },
-      { title: 'ME mężczyzn', href: 'cev-mistrzostwa-europy-mezczyzn' },
-      { title: 'ME kobiet', href: 'cev-mistrzostwa-europy-kobiet' },
+      { title: 'ME mężczyzn', href: 'mistrzostwa-europy-mezczyzn' },
+      { title: 'ME kobiet', href: 'mistrzostwa-europy-kobiet' },
       {
         title: 'Europejskie Puchary',
         href: 'europejskie-puchary-w-siatkowce',
       },
-      { title: 'Liga Narodów', href: 'liga-narodow-fivb' },
+      { title: 'Liga Narodów', href: 'liga-narodow' },
       { title: 'SuperLega', href: 'serie-a1' },
       { title: 'PLS 1. Liga', href: '1-liga' },
       { title: 'Siatkówka plażowa', href: 'siatkowka-plazowa' },
@@ -102,7 +102,7 @@ export const categories: Category[] = [
   {
     id: 6,
     title: 'Moto',
-    href: 'sporty-motorowe/',
+    href: 'sporty-motorowe',
     submenu: [
       { title: 'Formuła 1', href: 'formula-1' },
       { title: 'MotoGP', href: 'moto-gp' },
@@ -150,7 +150,7 @@ export const categories: Category[] = [
   {
     id: 9,
     title: 'Zimowe',
-    href: 'sporty-zimowe/',
+    href: 'sporty-zimowe',
     submenu: [
       { title: 'Skoki', href: 'skoki-narciarskie' },
       { title: 'Łyżwiarstwo Szybkie', href: 'lyzwiarstwo-szybkie' },
@@ -163,7 +163,7 @@ export const categories: Category[] = [
   {
     id: 10,
     title: 'Inne',
-    href: 'inne/',
+    href: 'inne',
     submenu: [
       { title: 'Lekkoatletyka', href: 'lekkoatletyka' },
       { title: 'Paryż 2024', href: 'igrzyska-olimpijskie-paryz-2024' },

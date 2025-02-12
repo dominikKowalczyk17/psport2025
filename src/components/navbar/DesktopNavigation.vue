@@ -11,13 +11,13 @@ defineProps<{
 <template>
   <nav>
     <ul class="flex items-center gap-1">
-      <li v-for="item in items" :key="item.id" class="relative group">
+      <li v-for="item in items" :key="item.href" class="relative group">
         <router-link
           class="block px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap"
           :to="
             item.id === 1
               ? { name: 'videos' }
-              : { name: 'category', params: { id: item.id } }
+              : { name: 'category', params: { href: item.href } }
           "
         >
           {{ item.title }}

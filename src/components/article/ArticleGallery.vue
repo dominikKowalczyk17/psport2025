@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-  XIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ZoomInIcon,
-} from "lucide-vue-next";
+import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon } from "lucide-vue-next";
 import type { NewsGalleryImage } from "@/types/News";
 
 const props = defineProps<{
@@ -24,12 +19,14 @@ const closeLightbox = () => {
   lightboxOpen.value = false;
 };
 
-const prevImage = () => {
+const prevImage = (event: Event) => {
+  event.stopPropagation();
   currentImageIndex.value =
     (currentImageIndex.value - 1 + props.images.length) % props.images.length;
 };
 
-const nextImage = () => {
+const nextImage = (event: Event) => {
+  event.stopPropagation();
   currentImageIndex.value = (currentImageIndex.value + 1) % props.images.length;
 };
 </script>
@@ -61,6 +58,7 @@ const nextImage = () => {
     <div
       v-if="lightboxOpen"
       class="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+      @click="closeLightbox"
     >
       <button @click="closeLightbox" class="absolute top-4 right-4 text-white">
         <XIcon class="w-8 h-8" />
@@ -76,7 +74,9 @@ const nextImage = () => {
       <button @click="nextImage" class="absolute right-4 text-white">
         <ChevronRightIcon class="w-12 h-12" />
       </button>
-      <p class="absolute bottom-4 left-0 right-0 text-center text-white">
+      <p
+        class="absolute bottom-4 left-0 right-0 text-center text-black bg-opacity-75 p-2 rounded"
+      >
         {{ images[currentImageIndex].caption }}
       </p>
     </div>
