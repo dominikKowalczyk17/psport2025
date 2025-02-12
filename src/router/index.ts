@@ -6,6 +6,7 @@ import NewsPage from '@/views/NewsPage.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import VideoTarget from '@/views/VideoTarget.vue';
 import SubCategoryPage from '@/views/SubCategoryPage.vue';
+import { categoryService } from '@/mocks/services/categoryService';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,19 +17,24 @@ const router = createRouter({
       component: MainPage,
     },
     {
-      path: '/category/:id',
+      path: '/kategoria/:href',
       name: 'category',
       component: CategoryPage,
-      beforeEnter: (to, from, next) => {
-        const categoryId = parseInt(to.params.id as string);
-        if (categoryId === 1) {
-          next({ name: 'videos' });
+      beforeEnter: async (to, from, next) => {
+        const categories = await categoryService.getCategories();
+        const category = categories.find((cat) => cat.href === to.params.href);
+        if (category) {
+          if (category.id === 1) {
+            next({ name: 'videos' });
+          } else {
+            next();
+          }
         } else {
-          next();
+          next({ name: 'home' });
         }
       },
       props: (route) => ({
-        categoryId: parseInt(route.params.id as string),
+        categoryHref: route.params.href,
       }),
     },
     {
