@@ -31,12 +31,18 @@ defineProps<{
           <div class="bg-white rounded-lg shadow-xl overflow-hidden">
             <ul class="py-1">
               <li v-for="subItem in item.submenu" :key="subItem.title">
-                <a
-                  :href="subItem.href"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap"
+                <router-link
+                  :to="{
+                    name: 'subCategory',
+                    params: {
+                      category: item.href,
+                      subcategory: subItem.href,
+                    },
+                  }"
+                  class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200"
                 >
                   {{ subItem.title }}
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>

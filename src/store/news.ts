@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import type { News, NewsState } from "@/types/News";
 
-export const useNewsStore = defineStore("news", {
+export const useNewsStore = defineStore('news', {
   state: (): NewsState => ({
     newsByCategory: {},
+    newsBySubCategory: {},
     hotNews: [],
     featuredNews: {},
     currentNews: null,
@@ -49,6 +50,15 @@ export const useNewsStore = defineStore("news", {
 
     isNewsLoading(): boolean {
       return this.loading;
+    },
+
+    getNewsBySubCategory: (state: NewsState) => {
+      return (category: string, subcategoryHref: string): News[] => {
+        const categoryNews = state.newsByCategory[category] || [];
+        return categoryNews.filter(
+          (news) => news.subCategory?.href === subcategoryHref,
+        );
+      };
     },
   },
 });

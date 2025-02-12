@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useLoadingStore } from '@/store/loadingStore';
-import { newsService } from '@/mocks/services/newsService';
 import MainPage from '@/views/MainPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
 import NewsPage from '@/views/NewsPage.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import VideoTarget from '@/views/VideoTarget.vue';
+import SubCategoryPage from '@/views/SubCategoryPage.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +50,15 @@ const router = createRouter({
       component: VideoTarget,
       props: (route) => ({
         videoId: parseInt(route.params.id as string),
+      }),
+    },
+    {
+      path: '/:category/:subcategory',
+      name: 'subCategory',
+      component: SubCategoryPage,
+      props: (route) => ({
+        category: route.params.category,
+        subCategory: route.params.subcategory,
       }),
     },
   ],

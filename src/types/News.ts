@@ -11,6 +11,10 @@ export interface News {
   modifiedDate?: Date;
   author: Author;
   category: Category;
+  subCategory?: {
+    title: string;
+    href: string;
+  };
   url: string;
   imageUrl: string;
   thumbnailUrl: string;
@@ -23,6 +27,7 @@ export interface News {
 
 export interface NewsState {
   newsByCategory: Record<string, News[]>;
+  newsBySubCategory: Record<string, News[]>;
   hotNews: News[];
   featuredNews: Record<string, News[]>;
   currentNews: News | null;
