@@ -17,8 +17,6 @@ const props = defineProps<{
           <span>{{ formatViews(video.views) }} wyświetleń</span>
           <span>•</span>
           <span>{{ formatDateForDisplay(video.publishDate) }}</span>
-          <span v-if="video.isHot" class="text-red-500">• 🔥 Hot</span>
-          <span v-if="video.isFeatured" class="text-blue-500">• ⭐ Featured</span>
         </div>
       </div>
     </div>
