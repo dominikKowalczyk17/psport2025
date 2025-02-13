@@ -43,8 +43,30 @@ export const useVideoStore = defineStore('videos', {
         this.loading = false;
       }
     },
+    async fetchVideoByUrl(url: string): Promise<void> {
+      this.loading = true;
+      this.error = null;
 
-    // ... rest of your store actions
+      try {
+        const video = await videosService.getVideoByUrl(url);
+        if (video) {
+          this.currentVideo = {
+            ...video,
+            thumbnailUrl: video.thumbnailUrl || '/placeholder.svg',
+          };
+        } else {
+          throw new Error('Video not found');
+        }
+      } catch (error) {
+        this.error =
+          error instanceof Error
+            ? error.message
+            : 'Problem with fetching video';
+        this.currentVideo = null;
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 
   getters: {

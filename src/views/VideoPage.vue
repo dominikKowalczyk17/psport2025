@@ -7,15 +7,15 @@ import { videosService } from "@/mocks/services/videosService";
 import type { Category } from "@/types/Category";
 import type { Video } from "@/types/Video";
 import VideoCard from "@/components/video/VideoCard.vue";
+import { useLoadingStore } from "@/store/loadingStore";
 
 const selectedCategory = ref("Wszystkie");
+const loadingStore = useLoadingStore();
 const categories = ref<Category[]>([]);
 const videos = ref<Video[]>([]);
 const error = ref<string | null>(null);
 
 const filteredVideos = computed(() => {
-  console.log("Selected Category:", selectedCategory.value);
-
   // Znajdujemy kategorię "Wideo" (id=1), żeby ją uwzględnić w "Wszystkie"
   const videoCategory = categories.value.find((cat) => cat.id === 1);
   const videoCategoryTitle = videoCategory ? videoCategory.title.toLowerCase() : null;
@@ -62,15 +62,17 @@ const regularVideos = computed(() =>
 
 onMounted(async () => {
   try {
+    loadingStore.startLoading();
     const [videosData, categoriesData] = await Promise.all([
       videosService.getVideos(),
       categoryService.getCategories(),
     ]);
     videos.value = videosData;
-    console.log(videosData);
     categories.value = categoriesData;
   } catch (e) {
     error.value = (e as Error).message;
+  } finally {
+    loadingStore.stopLoading();
   }
 });
 </script>

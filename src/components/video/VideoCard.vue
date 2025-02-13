@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <router-link
-    :to="{ name: 'video', params: { id: id.toString() } }"
+    :to="{ name: 'video', params: { url: url.replace('/', '') } }"
     :class="[
       'group relative bg-white shadow-md rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg',
       size === 'large' ? 'col-span-2 row-span-2' : '',

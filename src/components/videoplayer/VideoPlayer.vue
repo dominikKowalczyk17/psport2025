@@ -135,7 +135,7 @@ const handleMouseLeave = () => {
 <template>
   <div
     ref="playerRef"
-    class="relative w-full max-w-3xl mx-auto aspect-video bg-black"
+    class="relative w-full max-w-5xl mx-auto aspect-video bg-black"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >

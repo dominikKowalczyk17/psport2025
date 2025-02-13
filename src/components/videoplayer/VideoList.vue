@@ -6,13 +6,13 @@ import { videosService } from "@/mocks/services/videosService";
 import { formatViews } from "@/utils/dateFormatters";
 
 const props = defineProps<{
-  currentId: number;
+  currentUrl: string;
 }>();
 
 const videos = ref<Video[]>([]);
 
 onMounted(async () => {
-  videos.value = await videosService.getRelatedVideos(props.currentId);
+  videos.value = await videosService.getRelatedVideos(props.currentUrl);
 });
 </script>
 
@@ -21,8 +21,8 @@ onMounted(async () => {
     <router-link
       v-for="video in videos"
       :key="video.id"
-      :to="`/video/${video.id}`"
-      class="flex items-center space-x-3 hover:bg-gray-100 p-2 rounded"
+      :to="`/video/${video.url}`"
+      class="flex items-center space-x-3 p-2 rounded-lg hover: scale-105 transition-transform duration-300"
     >
       <img
         :src="video.thumbnailUrl || '/placeholder.svg'"

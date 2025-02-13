@@ -40,14 +40,19 @@ export const videosService = {
     );
   },
 
-  getRelatedVideos: async (videoId: number): Promise<Video[]> => {
+  getRelatedVideos: async (videoUrl: string): Promise<Video[]> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    const currentVideo = mockVideos.find((video) => video.id === videoId);
+    const currentVideo = mockVideos.find((video) => video.url === videoUrl);
     if (!currentVideo) return [];
 
     return mockVideos.filter(
       (video) =>
-        video.id !== videoId && video.category.id === currentVideo.category.id,
+        video.url !== videoUrl &&
+        video.category.id === currentVideo.category.id,
     );
+  },
+  getVideoByUrl: async (url: string): Promise<Video | null> => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return mockVideos.find((video) => video.url === url) || null;
   },
 };
