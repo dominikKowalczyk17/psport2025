@@ -6,6 +6,7 @@ import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
 import { videosService } from "@/mocks/services/videosService";
 import type { Video } from "@/types/Video";
+import { formatDateForDisplay } from "@/utils/dateFormatters";
 
 interface Props {
   category: Category;
@@ -54,7 +55,7 @@ const isNewsItem = (item: News | Video): item is News => {
     <h2 class="text-2xl font-bold p-4 bg-black text-white">
       {{ title || category.title }}
     </h2>
-    <div class="p-4">
+    <div>
       <div v-if="error" class="text-red-500">{{ error }}</div>
       <div
         v-else
@@ -65,7 +66,7 @@ const isNewsItem = (item: News | Video): item is News => {
           v-for="item in categoryItems.slice(0, 4)"
           :key="item.id"
           :class="isVideo ? 'aspect-video' : ''"
-          class="shadow-lg pb-4 rounded-lg hover:scale-105 transition-transform duration-300"
+          class="shadow-lg pb-4 rounded-lg transition-transform duration-300 hover:opacity-80"
         >
           <router-link
             :to="
@@ -119,6 +120,11 @@ const isNewsItem = (item: News | Video): item is News => {
             <p v-if="!isVideo && isNewsItem(item)" class="mt-1 text-sm text-gray-500">
               {{ item.excerpt }}
             </p>
+            <div class="flex justify-between items-center text-sm text-gray-500 pt-4">
+              <span v-if="item.category.title === 'Wideo'">{{ item.tags[0] }}</span>
+              <span v-else>{{ item.category.title }}</span>
+              <span>{{ formatDateForDisplay(item.publishDate) }}</span>
+            </div>
           </router-link>
         </div>
       </div>

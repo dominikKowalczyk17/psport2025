@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useLoadingStore } from "@/store/loadingStore";
 import type { News } from "@/types/News";
 import { newsService } from "@/mocks/services/newsService";
+import { formatDateForDisplay } from "@/utils/dateFormatters";
 
 const hotNews = ref<News[]>([]);
 const error = ref<string | null>(null);
@@ -59,11 +60,9 @@ onMounted(async () => {
               {{ news.title }}
             </h3>
             <p class="text-gray-600 mb-4 line-clamp-3">{{ news.excerpt }}</p>
-            <div
-              class="flex justify-between items-center text-sm text-gray-500"
-            >
+            <div class="flex justify-between items-center text-sm text-gray-500">
               <span>{{ news.category.title }}</span>
-              <span>{{ new Date(news.publishDate).toLocaleString() }}</span>
+              <span>{{ formatDateForDisplay(news.publishDate) }}</span>
             </div>
           </div>
         </router-link>
