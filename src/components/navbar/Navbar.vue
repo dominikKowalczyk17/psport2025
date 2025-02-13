@@ -34,6 +34,11 @@ const toggleMobileMenu = () => {
   isSubmenuOpen.value = null;
 };
 
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false;
+  document.body.style.overflow = "";
+};
+
 const toggleSubmenu = (categoryId: number) => {
   isSubmenuOpen.value = isSubmenuOpen.value === categoryId ? null : categoryId;
 };
@@ -58,9 +63,7 @@ onUnmounted(() => {
     class="fixed top-0 left-0 z-[1000] w-full bg-white shadow-lg transition-all duration-300"
     :class="[isScrolled ? 'h-16' : 'h-20', { 'h-screen': isMobileMenuOpen }]"
   >
-    <div
-      class="relative h-full justify-items-center max-w-[1920px] mx-auto px-4"
-    >
+    <div class="relative h-full justify-items-center max-w-[1920px] mx-auto px-4">
       <div class="flex items-center justify-between h-full">
         <div class="flex items-center space-x-8">
           <Logo />
@@ -94,6 +97,7 @@ onUnmounted(() => {
         :is-open="isMobileMenuOpen"
         :active-submenu="isSubmenuOpen"
         @toggle-submenu="toggleSubmenu"
+        @close-menu="closeMobileMenu"
       />
 
       <ProgressBar v-if="articleTitle" :progress="readingProgress || 0" />

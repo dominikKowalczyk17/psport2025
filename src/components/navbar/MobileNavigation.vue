@@ -11,7 +11,12 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: "toggleSubmenu", id: number): void;
+  (e: "closeMenu"): void;
 }>();
+
+const closeMenu = () => {
+  emit("closeMenu");
+};
 </script>
 
 <template>
@@ -48,12 +53,19 @@ const emit = defineEmits<{
           >
             <ul class="bg-gray-50 rounded-lg py-2 mb-2">
               <li v-for="subItem in item.submenu" :key="subItem.title">
-                <a
-                  :href="subItem.href"
-                  class="block px-6 py-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                <router-link
+                  :to="{
+                    name: 'subCategory',
+                    params: {
+                      category: item.href,
+                      subcategory: subItem.href,
+                    },
+                  }"
+                  class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200"
+                  @click.native="closeMenu"
                 >
                   {{ subItem.title }}
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
