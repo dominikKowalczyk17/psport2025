@@ -7,6 +7,7 @@ import VideoPage from '@/views/VideoPage.vue';
 import VideoTarget from '@/views/VideoTarget.vue';
 import SubCategoryPage from '@/views/SubCategoryPage.vue';
 import { categoryService } from '@/mocks/services/categoryService';
+import { videosService } from '@/mocks/services/videosService';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -51,12 +52,26 @@ const router = createRouter({
       component: VideoPage,
     },
     {
-      path: '/video/:id',
+      path: '/video/:url',
       name: 'video',
       component: VideoTarget,
       props: (route) => ({
-        videoId: parseInt(route.params.id as string),
+        videoUrl: route.params.url,
       }),
+      beforeEnter: async (to, from, next) => {
+        try {
+          const video = await videosService.getVideoByUrl(
+            to.params.url as string,
+          );
+          if (video) {
+            next();
+          } else {
+            next({ name: 'videos' });
+          }
+        } catch (error) {
+          next({ name: 'videos' });
+        }
+      },
     },
     {
       path: '/:category/:subcategory',

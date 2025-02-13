@@ -70,7 +70,7 @@ const isNewsItem = (item: News | Video): item is News => {
           <router-link
             :to="
               isVideo
-                ? { name: 'video', params: { id: item.id } }
+                ? { name: 'video', params: { url: item.url } }
                 : {
                     name: 'news',
                     params: { slug: isNewsItem(item) ? item.slug : '' },
