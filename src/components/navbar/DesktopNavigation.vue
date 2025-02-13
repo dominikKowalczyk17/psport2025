@@ -26,7 +26,7 @@ defineProps<{
         <!-- Submenu -->
         <div
           v-if="item.submenu?.length"
-          class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[240px]"
+          class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[240px] max-h-64 overflow-y-auto custom-scrollbar"
         >
           <div class="bg-white rounded-lg shadow-xl overflow-hidden">
             <ul class="py-1">
@@ -51,3 +51,24 @@ defineProps<{
     </ul>
   </nav>
 </template>
+
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  opacity: 0.5;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  opacity: 0.5;
+}
+</style>

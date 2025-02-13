@@ -32,19 +32,25 @@ const closeMenu = () => {
           :key="item.id"
           class="border-b border-gray-100 last:border-none"
         >
-          <button
-            class="w-full py-4 flex items-center justify-between text-left"
-            @click="emit('toggleSubmenu', item.id)"
-          >
-            <span class="text-base font-medium text-gray-800">
+          <div class="flex items-center justify-between">
+            <router-link
+              :to="{ name: 'category', params: { href: item.href } }"
+              class="block py-4 text-base font-medium text-gray-800 flex-1"
+              @click.native="closeMenu"
+            >
               {{ item.title }}
-            </span>
-            <ChevronDown
+            </router-link>
+            <button
               v-if="item.submenu?.length"
-              class="w-5 h-5 text-gray-400 transition-transform duration-200"
-              :class="activeSubmenu === item.id ? 'rotate-180' : ''"
-            />
-          </button>
+              class="py-4 text-left"
+              @click="emit('toggleSubmenu', item.id)"
+            >
+              <ChevronDown
+                class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                :class="activeSubmenu === item.id ? 'rotate-180' : ''"
+              />
+            </button>
+          </div>
 
           <div
             v-if="item.submenu?.length"

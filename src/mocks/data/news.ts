@@ -259,7 +259,7 @@ export const mockNews: News[] = [
       'Sensacyjne zakończenie walki o mistrzostwo świata w wadze ciężkiej! 25-letni Hiszpan Diego „El Toro” Ramirez znokautował w 10. rundzie niepokonanego dotąd Amerykanina Deontaya Millera lewym sierpowym w korpus.',
     publishDate: new Date('2025-02-06T12:00:00'),
     author: authors[2],
-    category: categories[9],
+    category: categories[7],
     subCategory: { title: 'Boks', href: 'boks' },
     url: '/boks/nowy-mistrz-swiata-boks-2025',
     imageUrl: '/placeholder.svg',

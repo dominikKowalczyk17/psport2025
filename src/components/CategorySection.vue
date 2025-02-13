@@ -31,16 +31,11 @@ onMounted(async () => {
         ? videos.filter((v) => v.tags.includes(props.videoCategory!))
         : videos;
     } else {
-      categoryItems.value = await newsService.getNewsByCategory(
-        props.category.id
-      );
+      categoryItems.value = await newsService.getNewsByCategory(props.category.id);
     }
   } catch (e) {
     error.value = (e as Error).message;
-    console.error(
-      `Error loading content for category ${props.category.title}:`,
-      e
-    );
+    console.error(`Error loading content for category ${props.category.title}:`, e);
   } finally {
     loadingStore.stopLoading();
   }
@@ -55,7 +50,7 @@ const isNewsItem = (item: News | Video): item is News => {
 </script>
 
 <template>
-  <section class="bg-white shadow-lg rounded-lg overflow-hidden">
+  <section v-if="categoryItems.length > 0" class="bg-white rounded-lg overflow-hidden">
     <h2 class="text-2xl font-bold p-4 bg-black text-white">
       {{ title || category.title }}
     </h2>
@@ -70,6 +65,7 @@ const isNewsItem = (item: News | Video): item is News => {
           v-for="item in categoryItems.slice(0, 4)"
           :key="item.id"
           :class="isVideo ? 'aspect-video' : ''"
+          class="shadow-lg pb-4 rounded-lg hover:scale-105 transition-transform duration-300"
         >
           <router-link
             :to="
@@ -117,15 +113,10 @@ const isNewsItem = (item: News | Video): item is News => {
                 </svg>
               </div>
             </div>
-            <h3
-              class="mt-2 text-lg font-semibold text-gray-900 group-hover:text-sky-700"
-            >
+            <h3 class="mt-2 text-lg font-semibold text-gray-900 group-hover:text-sky-700">
               {{ item.title }}
             </h3>
-            <p
-              v-if="!isVideo && isNewsItem(item)"
-              class="mt-1 text-sm text-gray-500"
-            >
+            <p v-if="!isVideo && isNewsItem(item)" class="mt-1 text-sm text-gray-500">
               {{ item.excerpt }}
             </p>
           </router-link>
