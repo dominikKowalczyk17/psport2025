@@ -34,7 +34,11 @@ const closeMenu = () => {
         >
           <div class="flex items-center justify-between">
             <router-link
-              :to="{ name: 'category', params: { href: item.href } }"
+              :to="
+                item.id === 1
+                  ? { name: 'videos' }
+                  : { name: 'category', params: { href: item.href } }
+              "
               class="block py-4 text-base font-medium text-gray-800 flex-1"
               @click.native="closeMenu"
             >
