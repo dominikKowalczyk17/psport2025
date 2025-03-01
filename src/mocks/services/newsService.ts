@@ -1,11 +1,19 @@
 // src/mocks/services/newsService.ts
-import type { News } from "@/types/News";
-import { mockNews } from "../data/news";
+import type { News } from '@/types/News';
+import { mockNews } from '../data/news';
+
+const endpoint = 'http://localhost:8080/api/v1';
 
 export const newsService = {
   getNews: async (): Promise<News[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockNews;
+    try {
+      const response = await fetch(`${endpoint}/news`);
+      const news = await response.json();
+      return news;
+    } catch (error) {
+      console.error('Błąd podczas pobierania newsów:', error);
+      return [];
+    }
   },
 
   getNewsByCategory: async (categoryId: number): Promise<News[]> => {
@@ -19,12 +27,20 @@ export const newsService = {
         return news.category.id === categoryId;
       });
     } catch (error) {
-      console.error("Błąd podczas filtrowania newsów:", error);
+      console.error('Błąd podczas filtrowania newsów:', error);
       return [];
     }
   },
 
   getHotNews: async (): Promise<News[]> => {
+    try {
+      const response = await fetch(`${endpoint}/news`);
+      const news = await response.json();
+      return news.filter((news: News) => news.isHot);
+    } catch (error) {
+      console.error('Błąd podczas pobierania newsów:', error);
+      return [];
+    }
     await new Promise((resolve) => setTimeout(resolve, 500));
     return mockNews.filter((news) => news.isHot);
   },
@@ -55,7 +71,7 @@ export const newsService = {
 
     return mockNews.filter(
       (news) =>
-        news.id !== newsId && news.category.id === currentNews.category.id
+        news.id !== newsId && news.category.id === currentNews.category.id,
     );
   },
 };

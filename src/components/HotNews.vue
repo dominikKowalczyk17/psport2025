@@ -13,6 +13,7 @@ onMounted(async () => {
   try {
     loadingStore.startLoading();
     hotNews.value = await newsService.getHotNews();
+    console.log("Hot news loaded:", hotNews.value);
   } catch (e) {
     error.value = (e as Error).message;
     console.error("Error loading hot news:", e);
@@ -62,7 +63,7 @@ onMounted(async () => {
             <p class="text-gray-600 mb-4 line-clamp-3">{{ news.excerpt }}</p>
             <div class="flex justify-between items-center text-sm text-gray-500">
               <span>{{ news.category.title }}</span>
-              <span>{{ formatDateForDisplay(news.publishDate) }}</span>
+              <span>{{ news.publishDate }}</span>
             </div>
           </div>
         </router-link>
